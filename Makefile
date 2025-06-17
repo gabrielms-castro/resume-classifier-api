@@ -1,2 +1,2 @@
 run-server:
-	@uvicorn api.routes:app --reload
+	@uvicorn app.api.routes:app --reload

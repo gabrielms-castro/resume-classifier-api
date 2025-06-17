@@ -34,3 +34,13 @@ This project is built using:
   - Accepts uploaded file (`UploadFile`)
   - Extracts text and classifies using a discriminative model
   - Stores classification result in MongoDB
+
+### [2025-06-16] - upload_resume logic and Text Extraction Structure
+- Defined the core `/upload_resume` route logic in `routes.py`:
+- Began implementing the Text Extraction module in `/services/text_extractor.py`
+    -  Implemented specialized subclasses:
+      - `PdfTextExtractor()`
+      - `MSWordTextExtractor()`
+      - `PlainTextExtractor()`
+    - I've also created a centralized extractor selection via `call_text_extractor()`
+
