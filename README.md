@@ -39,8 +39,7 @@ This project is built using:
 - Defined the core `/upload_resume` route logic in `routes.py`:
 - Began implementing the Text Extraction module in `/services/text_extractor.py`
     -  Implemented specialized subclasses:
-      - `PdfTextExtractor()`
-      - `MSWordTextExtractor()`
-      - `PlainTextExtractor()`
+        - `PdfTextExtractor()`
+        - `MSWordTextExtractor()`
+        - `PlainTextExtractor()`
     - I've also created a centralized extractor selection via `call_text_extractor()`
-
