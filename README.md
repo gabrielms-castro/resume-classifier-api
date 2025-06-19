@@ -43,3 +43,7 @@ This project is built using:
         - `MSWordTextExtractor()`
         - `PlainTextExtractor()`
     - I've also created a centralized extractor selection via `call_text_extractor()`
+  
+### [2025-06-19] - upload_resume logic and Text Extraction Structure
+- Finished `text_extractor`module and created some tests for it at `./tests/text_extractor.py`
+- I'm considering just using a LLM API for the classifier (although IDK if it would be the best decision)
