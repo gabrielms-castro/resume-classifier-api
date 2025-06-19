@@ -1,10 +1,9 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, status
+from fastapi import FastAPI, File, HTTPException, UploadFile, status
 
 from app.db.mongo import save
 from app.models.resume import ResumeUploadRequest
 from app.services.classifier import classify_resume
 from app.services.text_extractor import call_text_extractor
-
 
 app = FastAPI()
 
@@ -27,20 +26,20 @@ async def upload_resume(file: UploadFile = File(...)):
             detail=f"Unsuported file type: {file_type}. Supported types are: {', '.join(extensions)}"
         )
     
-    contents = await file.read()
-    if len(contents) == 0:
+    content = await file.read()
+    if len(content) == 0:
         return HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"error: File is empty or could not be processed. File size: {len(contents)} bytes",
+            detail=f"error: File is empty or could not be processed. File size: {len(content)} bytes",
         )
         
-    text = call_text_extractor(contents, file_type)
+    text = call_text_extractor(content, file_type)
         
     (label, score) = classify_resume(text)
     
     document = {
         "filename": file.filename,
-        "file_size": len(contents),
+        "file_size": len(content),
         "file_type": file.content_type,
         "classification": {
             "label": label,
@@ -49,7 +48,7 @@ async def upload_resume(file: UploadFile = File(...)):
     }
     
     data = ResumeUploadRequest(
-        file=contents,
+        file=content,
         filename=file.filename
     )
     
