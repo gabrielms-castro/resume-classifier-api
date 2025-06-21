@@ -58,4 +58,5 @@ This project is built using:
 - Created a `docker-compose.yml`for MongoDB startup
 - Integrated `lifespan` context manager for startup and shutdown events:
   - On startup: establish DB connection
-  - On shutdown: closes DB connection (I think it's a good one, i don't have anybody to ask for lol)
+  - On shutdown: closes DB connection 
+  >(I think it's a good one, i don't have anybody to ask for lol)
