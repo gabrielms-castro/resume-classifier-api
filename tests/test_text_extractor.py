@@ -1,5 +1,5 @@
 
-from app.services.text_extractor import call_text_extractor, clean_output_text
+from app.services.text_extractor_service import call_text_extractor, clean_output_text
 
 def test_pdf_text_extractor_extract_text():
     print("\n[DEBUG] Testing PDF Text Extractor...")
