@@ -47,3 +47,15 @@ This project is built using:
 ### [2025-06-19] - upload_resume logic and Text Extraction Structure
 - Finished `text_extractor`module and created some tests for it at `./tests/text_extractor.py`
 - I'm considering just using a LLM API for the classifier (although IDK if it would be the best decision)
+
+### [2025-06-21] - Persistency Layer, Docker Compose and API 
+- More Project structure organizing and renamed some folders
+  - Added a `Makefile` for managing development commands.
+  - Created a `run.sh` script to start both the API and MongoDB via Docker Compose.
+- MongoDB integration:
+  - Created a MongoDB conncetion handler `DBConnectionHandler`
+  - Built a `ResumesRepository` with a working `insert_document` method for persistence.
+- Created a `docker-compose.yml`for MongoDB startup
+- Integrated `lifespan` context manager for startup and shutdown events:
+  - On startup: establish DB connection
+  - On shutdown: closes DB connection (I think it's a good one, i don't have anybody to ask for lol)
