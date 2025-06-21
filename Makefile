@@ -1,2 +1,8 @@
-run-server:
-	@uvicorn app.api.routes:app --reload
+startup:
+	docker compose up -d && uvicorn main:app --reload
+
+docker-up:
+	docker compose up -d
+	
+docker-down:
+	docker compose down
