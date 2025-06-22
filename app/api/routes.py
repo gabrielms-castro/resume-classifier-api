@@ -1,11 +1,10 @@
-import subprocess
-from fastapi import FastAPI, File, HTTPException, UploadFile, status
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from contextlib import asynccontextmanager
 
-# from app.db.mongo_connection import save
 from app.db.connection_options.connection import DBConnectionHandler
 from app.db.repositories.resumes_repository import ResumesRepository
 from app.models.resume_schemas import ResumeUploadRequest
+from app.services.AI.llm_classifier import ai_resume_analyze
 from app.services.text_extractor_service import call_text_extractor
 
 db_handler = DBConnectionHandler()
@@ -35,7 +34,10 @@ async def read_root():
     return {"message": "Welcome to the Resume Classifier API"}
 
 @app.post("/upload_resume/", status_code=status.HTTP_200_OK)
-async def upload_resume(file: UploadFile = File(...)):
+async def upload_resume(
+    job_description: str = Form(...), 
+    file: UploadFile = File(...)
+):
     extensions = [
         "application/pdf",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -56,8 +58,29 @@ async def upload_resume(file: UploadFile = File(...)):
             detail=f"error: File is empty or could not be processed. File size: {len(content_raw)} bytes",
         )
     
+    if len(job_description) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="error: Job description cannot be empty"
+        )
+    
     extractor = call_text_extractor(file_type=file_type)
     content_processed = extractor.extract_text(content_raw)
+    
+    try:
+        result = ai_resume_analyze(
+            resume=content_processed,
+            job_description=job_description
+        )
+        assert 'score' in result, "AI analysis did not return a score"
+        assert 'label' in result, "AI analysis did not return a label"
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"AI analysis failed: {str(e)}"
+        )
+    
+    label, score, ai_tip = result.get('label'), result.get('score'), result.get('ai_tip')
     
     data = ResumeUploadRequest(
         file=content_raw,
@@ -65,9 +88,11 @@ async def upload_resume(file: UploadFile = File(...)):
         filename=file.filename,
         file_size=len(content_raw),
         file_type=file.content_type,
+        job_description=job_description,
         classification={
-            "label": "Match",
-            "score": 0.8
+            "label": label,
+            "score": score,
+            "ai_tip": ai_tip
         }
     )
     
@@ -77,12 +102,15 @@ async def upload_resume(file: UploadFile = File(...)):
         "message": "Resume uploaded successfully",
         "id": str(persist_response.get("_id")),
         "filename": file.filename,
+        "file_content": content_processed,
         "file_size": len(content_raw),
         "file_type": file.content_type,
+        "job_description": job_description,
         "classification": {
-            "label": "Match",
-            "confidence_score": 0.82
-        }        
+            "label": label,
+            "score": score,
+            "ai_tip": ai_tip
+        }      
     }
     
     return response
