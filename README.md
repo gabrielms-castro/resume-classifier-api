@@ -7,13 +7,28 @@ The **Resume Classifier API** is a backend service designed to classify resumes 
 This project is built using:
 
 - ⚙️ **FastAPI** for the API layer
-- 🧠 **scikit-learn** for the initial machine learning pipeline (with future support for PyTorch/TensorFlow)
+- 🧠 **Langchain with Gemini LLM** for resume analyze
 - 📦 **MongoDB** for storing extracted resumes, classification results, and submission metadata
 - ✅ **Pydantic** for input validation
-- 🧪 **Unittest** for API and service-level testing
+- 🧪 **Pytest** for API and service-level testing
 - 🐳 **Docker** for containerized development and deployment
 
 > The goal is to create a modular, scalable, and production-ready API that demonstrates backend and ML engineering skills while solving a realistic use case.
+---
+## Demo
+Users can submit their **resume** via `POST`request to the `/upload_resume/` endpoint.
+The system performs the following steps:
+1. Validates file MIME type and it content
+2. Extracts file content using the `text_extractor_service.py`
+3. Analyzes the resume against the job description using **Gemini via Langchain** 
+4. Return a structured output:
+  - The **classification** (Match, Partial Match, No Match)
+  - A **score** between 0 and 1
+  - An **AI generated tip** with a practical advice of how to improve the resume for the job
+
+### Example Output
+![image info](./images/example.png)
+
 
 ---
 
@@ -60,3 +75,16 @@ This project is built using:
   - On startup: establish DB connection
   - On shutdown: closes DB connection 
   >(I think it's a good one, i don't have anybody to ask for lol)
+
+### [2025-06-22] - Persistency Layer, Docker Compose and API
+- Implemented Resume Analyzer with LLM:
+  - Introduced the use of **Langchain** with **Gemini** to process resume and job description inputs using Natural Language
+  - Created a `llm_classifier.py`and `config.py`under `app/services/AI/`to encapsulate prompt configuration and model interaction logic.
+- Integrated AI analysis directly into the `/upload_resume/ route.
+- Schema Updates:
+  - Added `job_description` and `ai_tip`to the `ResumeUploadRequest`model.
+  - Updated `ClassificationDict` with AI-generated suggestions for candidates.
+- Cleanup and Refactor:
+  - Removed obsolete `classifier.py`.
+  - Updated `requirements.txt` to reflect Langchain and Gemini dependencies.
+
