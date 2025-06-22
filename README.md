@@ -76,7 +76,7 @@ The system performs the following steps:
   - On shutdown: closes DB connection 
   >(I think it's a good one, i don't have anybody to ask for lol)
 
-### [2025-06-22] - Persistency Layer, Docker Compose and API
+### [2025-06-22] - AI Integration
 - Implemented Resume Analyzer with LLM:
   - Introduced the use of **Langchain** with **Gemini** to process resume and job description inputs using Natural Language
   - Created a `llm_classifier.py`and `config.py`under `app/services/AI/`to encapsulate prompt configuration and model interaction logic.
