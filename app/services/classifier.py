@@ -1,3 +1,0 @@
-
-def classify_resume():
-    ...
