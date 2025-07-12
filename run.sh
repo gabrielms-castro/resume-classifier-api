@@ -1,4 +1,6 @@
 #!/bin/bash
 docker compose up -d
-uvicorn main:app --reload
+source venv/bin/activate
+streamlit run app/view/streamlit.py
+uvicorn app.api.routes:app --reload
 docker compose down
