@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from app.db.connection_options.connection import DBConnectionHandler
 from app.db.repositories.resumes_repository import ResumesRepository
 from app.models.resume_schemas import ResumeUploadRequest
-from app.services.AI.llm_classifier import ai_resume_analyze
+from app.services.ai_agent.llm_classifier import ai_resume_analyze
 from app.services.text_extractor_service import call_text_extractor
 
 db_handler = DBConnectionHandler()
@@ -80,7 +80,7 @@ async def upload_resume(
             detail=f"AI analysis failed: {str(e)}"
         )
     
-    label, score, ai_tip = result.get('label'), result.get('score'), result.get('ai_tip')
+    label, score, ai_tip, key_gaps, strengths = result.get('label'), result.get('score'), result.get('ai_tip'), result.get("key_gaps"), result.get("strengths")
     
     data = ResumeUploadRequest(
         file=content_raw,
@@ -92,7 +92,9 @@ async def upload_resume(
         classification={
             "label": label,
             "score": score,
-            "ai_tip": ai_tip
+            "ai_tip": ai_tip,
+            "key_gaps": key_gaps,
+            "strengths": strengths
         }
     )
     
@@ -109,7 +111,9 @@ async def upload_resume(
         "classification": {
             "label": label,
             "score": score,
-            "ai_tip": ai_tip
+            "ai_tip": ai_tip,
+            "key_gaps": key_gaps,
+            "strengths": strengths
         }      
     }
     
