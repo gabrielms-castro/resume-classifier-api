@@ -3,6 +3,7 @@ import re
 
 from abc import ABC, abstractmethod
 from pypdf import PdfReader
+import docx
 
 
 class TextExtractor(ABC):
@@ -22,16 +23,12 @@ class PDFTextExtractor(TextExtractor):
 
 class MSWordTextExtractor(TextExtractor):
     def extract_text(self, content):
-        try:
-            import docx
-            doc = docx.Document(io.BytesIO(content))
-            text_pages = []
-            for paragraph in doc.paragraphs:
-                text_pages.append(paragraph.text)
-            return clean_output_text("\n".join(text_pages))
+        doc = docx.Document(io.BytesIO(content))
+        text_pages = []
+        for paragraph in doc.paragraphs:
+            text_pages.append(paragraph.text)
+        return clean_output_text("\n".join(text_pages))
         
-        except ImportError:
-            raise RuntimeError("docx module not found")
 
 class PlainTextExtractor(TextExtractor):
     def extract_text(self, content):

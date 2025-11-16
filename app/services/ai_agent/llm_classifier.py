@@ -2,7 +2,6 @@ from app.models.resume_schemas import ClassificationDict
 from .config import (
     MAX_CHARS,
     MODEL_NAME,
-    SYSTEM_PROMPT,
     GEMINI_API_KEY
 )
 
