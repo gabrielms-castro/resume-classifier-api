@@ -1,20 +1,31 @@
 # Resume Classifier API
 
+## ✅ Todo List
+- Improve /api folder organization
+- Put DB configs (env variables) into an general config.py for better app maintenance
+- Improve de AI agent output (consistency, hallucinations etc)
+- 
+
+<br>
+
 ## 📌 About the Project
 
 The **Resume Classifier API** is a backend service designed to classify resumes (CVs) using machine learning models. It provides an API endpoint for uploading resumes as raw text or files (PDF), processes them to extract relevant content, and returns predicted job categories along with confidence scores.
 
 This project is built using:
 
-- ⚙️ **FastAPI** for the API layer
-- 🧠 **Langchain with Gemini LLM** for resume analyze
-- 📦 **MongoDB** for storing extracted resumes, classification results, and submission metadata
-- ✅ **Pydantic** for input validation
-- 🧪 **Pytest** for API and service-level testing
-- 🐳 **Docker** for containerized development and deployment
+- **FastAPI** for the API layer
+- **Langchain with Gemini LLM** for resume analyze
+- **MongoDB** for storing extracted resumes, classification results, and submission metadata
+- **Pydantic** for input validation
+- **Pytest** for API and service-level testing
+- **Docker** for containerized development and deployment
 
 > The goal is to create a modular, scalable, and production-ready API that demonstrates backend and ML engineering skills while solving a realistic use case.
----
+
+<br>
+
+
 ## Demo
 Users can submit their **resume** via `POST`request to the `/upload_resume/` endpoint.
 The system performs the following steps:
@@ -29,8 +40,23 @@ The system performs the following steps:
 ### Example Output
 ![image info](./images/example.png)
 
+<br>
 
----
+## ⚡ How to run
+1. Get Docker installed
+2. Get UV installed
+3. Run `uv sync`
+4. In 2 different terminals, run the API and the Streamlit UI
+```sh
+# Terminal 1
+make startup
+
+# Terminal 2
+make ui
+```
+You can now send an API request to the FastAPI server or just use the Streamlit UI at http://localhost:8501
+
+<br>
 
 ## 🗓️ Dev Log
 
@@ -88,3 +114,7 @@ The system performs the following steps:
   - Removed obsolete `classifier.py`.
   - Updated `requirements.txt` to reflect Langchain and Gemini dependencies.
 
+### [2025-12-27] - Enhanced codebase organization
+- Destructured the Text Extract Service indo multiple files
+- Created a .env.example so others will know what data they need to run de app
+- Refactored the files importation
