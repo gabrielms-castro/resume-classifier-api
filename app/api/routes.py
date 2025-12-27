@@ -5,7 +5,7 @@ from app.db.connection_options.connection import DBConnectionHandler
 from app.db.repositories.resumes_repository import ResumesRepository
 from app.models.resume_schemas import ResumeUploadRequest
 from app.services.ai_agent.llm_classifier import ai_resume_analyze
-from app.services.text_extractor_service import call_text_extractor
+from app.services.text_extractor.factory import call_text_extractor
 
 db_handler = DBConnectionHandler()
 
